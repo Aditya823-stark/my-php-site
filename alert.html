@@ -1,0 +1,36 @@
+<?php
+$alertMessage = "🚨 Alert! This is an important scrolling message. Stay updated! 🚨";
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Alert Message Marquee</title>
+    <style>
+        .alert-marquee {
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: red; /* Red text */
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .alert-marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll-left 10s linear infinite;
+        }
+        @keyframes scroll-left {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="alert-marquee">
+    <span><?php echo $alertMessage; ?></span>
+</div>
+
+</body>
+</html>

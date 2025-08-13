@@ -1,0 +1,119 @@
+<?php
+require 'vendor/autoload.php';
+
+use Mpdf\Mpdf;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+function send_ticket_email($data) {
+    $name      = $data['name'];
+    $email     = $data['email'];
+    $from      = $data['from'];
+    $to        = $data['to'];
+    $date      = $data['journey_date'];
+    $class     = $data['class_type'];
+    $fare      = $data['fare'];
+    $distance  = $data['distance'];
+    $bookingId = uniqid('TKT');
+
+    // HTML Ticket Template
+    $html = '
+    <html>
+    <head>
+      <style>
+        body {
+          font-family: "Segoe UI", sans-serif;
+          background: #f8f9fa;
+          padding: 30px;
+        }
+        .ticket {
+          background-color: #ffffff;
+          padding: 30px;
+          border-radius: 10px;
+          border: 2px dashed #007bff;
+          max-width: 750px;
+          margin: auto;
+          box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+          color: #007bff;
+          text-align: center;
+          margin-bottom: 25px;
+        }
+        .details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+          margin-bottom: 20px;
+        }
+        .label {
+          font-weight: 600;
+          color: #333;
+        }
+        .value {
+          color: #000;
+        }
+        .footer {
+          text-align: center;
+          font-size: 12px;
+          color: #666;
+          border-top: 1px dashed #ccc;
+          padding-top: 10px;
+          margin-top: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="ticket">
+        <h2>Indian Railway E-Ticket</h2>
+        <div class="details">
+          <div><span class="label">Booking ID:</span> <span class="value">' . $bookingId . '</span></div>
+          <div><span class="label">Journey Date:</span> <span class="value">' . $date . '</span></div>
+          <div><span class="label">Passenger Name:</span> <span class="value">' . $name . '</span></div>
+          <div><span class="label">Class:</span> <span class="value">' . $class . '</span></div>
+          <div><span class="label">From Station:</span> <span class="value">' . $from . '</span></div>
+          <div><span class="label">To Station:</span> <span class="value">' . $to . '</span></div>
+          <div><span class="label">Distance:</span> <span class="value">' . $distance . ' km</span></div>
+          <div><span class="label">Fare:</span> <span class="value">₹' . $fare . '</span></div>
+        </div>
+        <div class="footer">
+          Please carry a valid government-issued ID proof during travel.<br>
+          Thank you for booking with Indian Railways. Safe journey!
+        </div>
+      </div>
+    </body>
+    </html>
+    ';
+
+    // Generate PDF using Mpdf
+    $pdfFile = __DIR__ . "/ticket_" . $bookingId . ".pdf";
+    $mpdf = new Mpdf();
+    $mpdf->WriteHTML($html);
+    $mpdf->Output($pdfFile, 'F');
+
+    // Email with PHPMailer
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'your_email@gmail.com';     // ✅ Your Gmail ID
+        $mail->Password   = 'ngzxsqmvaazythjq';         // ✅ App Password (not regular password)
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+
+        $mail->setFrom('your_email@gmail.com', 'Railway Booking System');
+        $mail->addAddress($email, $name);
+        $mail->Subject = 'Your Railway E-Ticket';
+        $mail->Body    = "Dear $name,\n\nPlease find your e-ticket attached.\n\nHappy journey!";
+        $mail->addAttachment($pdfFile, 'E-Ticket.pdf');
+
+        $mail->send();
+
+        unlink($pdfFile); // Clean up file
+
+        return true;
+    } catch (Exception $e) {
+        return "Email failed: " . $mail->ErrorInfo;
+    }
+}

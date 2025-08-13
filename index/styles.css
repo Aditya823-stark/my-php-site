@@ -1,0 +1,678 @@
+:root {
+    --primary-color: #1e3a8a;
+    --secondary-color: #f97316;
+    --accent-color: #dc2626;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body { 
+    font-family: 'Poppins', sans-serif; 
+    line-height: 1.6;
+}
+
+.setup-alert {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+    z-index: 1000;
+}
+
+.setup-alert a {
+    color: white;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+.notification-banner {
+    position: relative;
+    z-index: 1050;
+    margin-bottom: 0;
+    border-radius: 0;
+    border: none;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* IRCTC Top Header Styles */
+.irctc-top-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 8px 0;
+    font-size: 12px;
+}
+
+.irctc-logo {
+    height: 50px;
+    width: auto;
+}
+
+.header-top-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.header-btn {
+    color: #1f2937;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.header-btn:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+.header-btn.daily-deals {
+    background: #dc2626;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.date-time {
+    color: #6b7280;
+    font-weight: bold;
+}
+
+.font-size-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.font-size-controls span {
+    cursor: pointer;
+    padding: 2px 5px;
+    border: 1px solid #d1d5db;
+    border-radius: 2px;
+}
+
+.hindi-text {
+    color: #1f2937;
+    font-weight: bold;
+}
+
+.irctc-small-logo {
+    height: 30px;
+    width: auto;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* IRCTC Main Navigation */
+.irctc-main-nav {
+    background: var(--primary-color);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 998;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    padding: 15px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.nav-item.active {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.nav-item.trains {
+    background: var(--accent-color);
+    color: white;
+}
+
+.nav-item.home-icon {
+    padding: 15px;
+    font-size: 16px;
+}
+
+.nav-item.home-icon:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Carousel Styles */
+.hero-carousel {
+    position: relative;
+    margin-top: 0;
+    overflow: hidden;
+}
+
+.carousel {
+    height: 80vh;
+    min-height: 600px;
+    max-height: 800px;
+}
+
+.carousel-inner {
+    height: 100%;
+    width: 100%;
+}
+
+.carousel-item {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.carousel-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+}
+
+.carousel-caption {
+    background: transparent;
+    padding: 40px;
+    border-radius: 15px;
+    bottom: 10%;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-width: 600px;
+    text-align: center;
+}
+
+.carousel-caption h5 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.carousel-caption p {
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    color: white;
+    opacity: 0.95;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.carousel-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    padding: 15px 35px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+}
+
+.carousel-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.5);
+    color: white;
+    background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+}
+
+/* Feature Cards */
+.feature-card {
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+    height: 100%;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    border-color: var(--secondary-color);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Services Section */
+.irctc-services-section {
+    padding: 60px 0;
+}
+
+.services-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.service-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+.service-item {
+    text-align: center;
+    padding: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.service-item:hover {
+    transform: translateY(-5px);
+}
+
+.service-icon {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.service-icon i {
+    font-size: 2.5rem;
+    color: #666;
+}
+
+.service-item:hover .service-icon {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.service-item:hover .service-icon i {
+    color: #007bff;
+}
+
+.service-item h5 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* Footer Styles */
+.footer {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e40af 100%);
+    color: white;
+    padding: 60px 0 20px;
+    margin-top: 80px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section h5 {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.footer-section ul li a:hover {
+    color: white;
+    padding-left: 5px;
+}
+
+.social-media {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.social-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-icon.facebook { background: #3b5998; }
+.social-icon.twitter { background: #1da1f2; }
+.social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.social-icon.youtube { background: #ff0000; }
+.social-icon.linkedin { background: #0077b5; }
+
+.social-icon:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.payment-partners {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.payment-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.payment-logo {
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.payment-logo:hover {
+    transform: translateY(-2px);
+    opacity: 1;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 20px;
+    text-align: center;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .navbar-nav {
+        gap: 15px;
+    }
+    
+    .nav-link {
+        font-size: 14px;
+        padding: 8px 12px !important;
+    }
+    
+    .carousel-caption h5 {
+        font-size: 2.5rem;
+    }
+    
+    .carousel-caption p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar-collapse {
+        background: rgba(30, 58, 138, 0.95);
+        margin-top: 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    
+    .navbar-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .nav-link {
+        text-align: center;
+        padding: 12px 20px !important;
+        border-radius: 8px;
+    }
+    
+    .carousel {
+        height: 60vh;
+        min-height: 400px;
+    }
+    
+    .carousel-caption {
+        padding: 20px;
+        bottom: 5%;
+    }
+    
+    .carousel-caption h5 {
+        font-size: 2rem;
+    }
+    
+    .carousel-caption p {
+        font-size: 1rem;
+    }
+    
+    .service-row {
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-brand img {
+        height: 35px;
+    }
+    
+    .header-controls {
+        gap: 10px;
+    }
+    
+    .font-controls button,
+    .lang-toggle {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .carousel {
+        height: 50vh;
+        min-height: 350px;
+    }
+    
+    .carousel-caption {
+        padding: 15px;
+        max-width: 90%;
+    }
+    
+    .carousel-caption h5 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .carousel-caption p {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+    
+    .carousel-btn {
+        padding: 12px 25px;
+        font-size: 14px;
+    }
+    
+    .feature-card {
+        padding: 30px 15px;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .service-row {
+        gap: 20px;
+    }
+    
+    .service-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .service-icon i {
+        font-size: 2rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .social-icons {
+        gap: 15px;
+    }
+    
+    .payment-logos {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img {
+        height: 30px;
+    }
+    
+    .header-controls {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .font-controls {
+        order: 2;
+    }
+    
+    .lang-toggle {
+        order: 1;
+    }
+    
+    .carousel {
+        height: 40vh;
+        min-height: 300px;
+    }
+    
+    .carousel-caption h5 {
+        font-size: 1.2rem;
+    }
+    
+    .carousel-caption p {
+        font-size: 0.8rem;
+    }
+    
+    .carousel-btn {
+        padding: 10px 20px;
+        font-size: 12px;
+    }
+    
+    .service-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .service-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .service-icon i {
+        font-size: 1.8rem;
+    }
+    
+    .social-icons {
+        gap: 10px;
+    }
+    
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .payment-logos {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

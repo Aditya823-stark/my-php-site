@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IRTCTC — Railway Management System (Frontend Prototype)</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Swiper (carousel) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+  <!-- AOS (scroll animations) -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    /* ---------- Base & layout ---------- */
+    :root{
+      --brand:#0d6efd;
+      --muted:#6c757d;
+      --glass: rgba(255,255,255,0.6);
+      --card-bg: rgba(255,255,255,0.85);
+    }
+    html,body{height:100%;}
+    body{
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg,#f8fbff 0%, #eef6ff 100%);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Navbar */
+    .navbar-brand strong{letter-spacing:1px}
+    .nav-cta{padding:.4rem .9rem;border-radius:.45rem}
+
+    /* Hero */
+    .hero{
+      min-height:80vh;
+      display:grid;align-items:center;
+      background-image:linear-gradient(180deg, rgba(13,110,253,0.06), rgba(13,110,253,0.02));
+    }
+    .hero-card{backdrop-filter: blur(6px); background:var(--card-bg); border-radius:18px; box-shadow:0 10px 30px rgba(13,110,253,0.06)}
+
+    /* Search form */
+    .search-card .form-control{border:0;border-radius:12px}
+    .search-card .btn-primary{border-radius:10px}
+
+    /* Trains list */
+    .train-card{border-radius:12px;box-shadow:0 6px 18px rgba(20,20,50,0.04)}
+
+    /* Carousel overrides for swiper */
+    .swiper{width:100%;}
+    .swiper-slide{display:flex;align-items:center;justify-content:center;height:420px}
+    .slide-hero{background-size:cover;background-position:center;border-radius:12px;overflow:hidden}
+
+    /* Footer */
+    footer{background:#03102a;color:#dbe9ff;padding:3rem 0}
+
+    /* Fancy tiny animated train */
+    .train-path{position:relative;height:120px}
+    .train{position:absolute;left:0;top:50%;transform:translateY(-50%);width:120px}
+
+    /* Responsive tweaks */
+    @media (max-width: 768px){
+      .swiper-slide{height:260px}
+      .hero{min-height:70vh}
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://img.icons8.com/ios-filled/50/0d6efd/train.png" alt="logo" width="36" class="me-2">
+        <div>
+          <div style="line-height:1">IRTCTC <small class="d-block text-muted" style="font-size:10px;margin-top:-4px">Railway Management System</small></div>
+        </div>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#trains">Trains</a></li>
+          <li class="nav-item"><a class="nav-link" href="#booking">Booking</a></li>
+          <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
+          <li class="nav-item ms-2"><a class="btn btn-outline-primary nav-cta" href="#login">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-7" data-aos="fade-right">
+          <div class="hero-card p-4 p-lg-5">
+            <h1 class="display-5 mb-2">Book trains, manage fleets, and monitor operations — all in one dashboard.</h1>
+            <p class="lead text-muted">A modern front-end prototype for IRTCTC with advanced animations, carousels, and interactive booking flows.</p>
+
+            <!-- Search Card -->
+            <div class="mt-4 search-card p-3 p-md-4">
+              <form id="quickSearch" class="row g-2 align-items-end">
+                <div class="col-sm-6 col-md-3">
+                  <label class="form-label small text-muted">From</label>
+                  <input class="form-control" id="fromStation" placeholder="e.g. New Delhi" required>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="form-label small text-muted">To</label>
+                  <input class="form-control" id="toStation" placeholder="e.g. Mumbai Central" required>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label small text-muted">Date</label>
+                  <input type="date" class="form-control" id="journeyDate">
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label small text-muted">Passengers</label>
+                  <select class="form-select" id="passengers">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                  </select>
+                </div>
+                <div class="col-md-2 d-grid">
+                  <button type="submit" class="btn btn-primary">Search Trains</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="mt-3 small text-muted">Tip: use keyboard shortcuts — press <kbd>S</kbd> to focus the search form.</div>
+          </div>
+        </div>
+
+        <div class="col-lg-5" data-aos="fade-left">
+          <!-- Swiper hero carousel -->
+          <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div class="slide-hero" style="background-image:url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80'); width:100%;height:100%;padding:1rem;">
+                  <div class="p-3 text-white" style="text-shadow:0 6px 22px rgba(0,0,0,.45)">
+                    <h3>Premium Intercity Trains</h3>
+                    <p class="mb-0">Comfort, speed &amp; convenience on every route.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="slide-hero" style="background-image:url('https://images.unsplash.com/photo-1528747045269-390fe33c19d5?auto=format&fit=crop&w=1200&q=80')">
+                  <div class="p-3 text-white" style="text-shadow:0 6px 22px rgba(0,0,0,.45)">
+                    <h3>Real-time Train Tracking</h3>
+                    <p class="mb-0">Live statuses, arrivals, and platform info.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="slide-hero" style="background-image:url('https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=1200&q=80')">
+                  <div class="p-3 text-white" style="text-shadow:0 6px 22px rgba(0,0,0,.45)">
+                    <h3>Friendly Mobile Experience</h3>
+                    <p class="mb-0">Optimized for phones and tablets.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- animated tiny train path -->
+      <div class="train-path mt-5" data-aos="fade-up">
+        <svg width="100%" height="120" viewBox="0 0 800 120" preserveAspectRatio="none">
+          <path id="railPath" d="M20 80 C 200 20, 400 20, 780 80" stroke="#cfe8ff" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </svg>
+        <img src="https://img.icons8.com/ios-filled/100/0d6efd/train.png" class="train" id="movingTrain" alt="train">
+      </div>
+
+    </div>
+  </header>
+
+  <!-- FEATURES -->
+  <section id="features" class="py-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <h2 data-aos="fade-up">Platform features</h2>
+          <p class="text-muted" data-aos="fade-up" data-aos-delay="80">Fast booking, PNR status, cancellations, multi-leg itinerary support, seat maps, and operational dashboard for admins.</p>
+        </div>
+      </div>
+
+      <div class="row gy-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="120">
+          <div class="p-3 train-card">
+            <h5><i class="fa-solid fa-route me-2 text-primary"></i> Route Planner</h5>
+            <p class="small text-muted">Auto-suggest stations, show fastest &amp; cheapest routes.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
+          <div class="p-3 train-card">
+            <h5><i class="fa-solid fa-clock me-2 text-primary"></i> Real-time ETA</h5>
+            <p class="small text-muted">Live tracking, delays, and push notifications.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="p-3 train-card">
+            <h5><i class="fa-solid fa-sitemap me-2 text-primary"></i> Admin Operations</h5>
+            <p class="small text-muted">Crew allocation, rake management, and maintenance logs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAINS LIST / MOCK RESULTS -->
+  <section id="trains" class="py-5 bg-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Available Trains</h3>
+        <div class="small text-muted">Showing results for <strong id="resultsMeta">New Delhi → Mumbai Central</strong></div>
+      </div>
+
+      <div id="trainResults" class="row g-3">
+        <!-- JS will render mock train cards here -->
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn btn-outline-secondary" id="loadMore">Load more</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING FLOW (modal) -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Book Seats - <span id="modalTrainName">Train</span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-8">
+              <h6>Seat Map (interactive mock)</h6>
+              <div class="p-3 border rounded" id="seatMap" style="min-height:320px"></div>
+            </div>
+            <div class="col-lg-4">
+              <h6>Booking Summary</h6>
+              <div class="p-3 border rounded">
+                <div id="bookingSummary">No seats selected</div>
+                <div class="d-grid mt-3">
+                  <button class="btn btn-success" id="confirmBooking">Confirm &amp; Pay</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD (SAMPLE) -->
+  <section id="dashboard" class="py-5">
+    <div class="container">
+      <h3 data-aos="fade-up">Admin Dashboard Preview</h3>
+      <div class="row gy-3 mt-3">
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="60">
+          <div class="p-3 rounded" style="background:linear-gradient(180deg,#fff,#f7fbff);box-shadow:0 6px 20px rgba(8,30,80,0.04)">
+            <div class="small text-muted">Active Trains</div>
+            <div class="h2">128</div>
+          </div>
+        </div>
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="120">
+          <div class="p-3 rounded" style="background:linear-gradient(180deg,#fff,#f7fbff);box-shadow:0 6px 20px rgba(8,30,80,0.04)">
+            <div class="small text-muted">Bookings Today</div>
+            <div class="h2">4,312</div>
+          </div>
+        </div>
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="180">
+          <div class="p-3 rounded" style="background:linear-gradient(180deg,#fff,#f7fbff);box-shadow:0 6px 20px rgba(8,30,80,0.04)">
+            <div class="small text-muted">Delays Reported</div>
+            <div class="h2">9</div>
+          </div>
+        </div>
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="240">
+          <div class="p-3 rounded" style="background:linear-gradient(180deg,#fff,#f7fbff);box-shadow:0 6px 20px rgba(8,30,80,0.04)">
+            <div class="small text-muted">Active Users</div>
+            <div class="h2">21,904</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4 gy-3">
+        <div class="col-lg-8" data-aos="fade-up">
+          <div class="p-3 border rounded">
+            <h5>Live Map (placeholder)</h5>
+            <div style="height:320px;background:linear-gradient(90deg,#eef4ff,#fff);display:flex;align-items:center;justify-content:center;color:var(--muted)">Map / heatmap placeholder</div>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="80">
+          <div class="p-3 border rounded">
+            <h5>Recent Alerts</h5>
+            <ul class="list-unstyled small">
+              <li>Train 12207 delayed by 25m - track maintenance</li>
+              <li>New rake added to 20851 from Mumbai</li>
+              <li>Signal fault cleared near Nagpur</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>IRTCTC</h5>
+          <p class="small text-muted">This is a front-end prototype and not the official IRTCTC service. Use for design/demo purposes.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <small>© <span id="currentYear"></span> IRTCTC UI Prototype</small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS: Bootstrap, Swiper, AOS, GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+
+  <script>
+    /***********************************************
+     * Small front-end app logic (mock data & interactions)
+     * Libraries used: Bootstrap, Swiper, AOS, GSAP
+     ***********************************************/
+
+    // Init AOS (scroll animations)
+    AOS.init({duration:700,once:true,easing:'ease-in-out'});
+
+    // Hero Swiper
+    const swiper = new Swiper('.mySwiper',{
+      loop:true,
+      pagination:{el:'.swiper-pagination',clickable:true},
+      navigation:{nextEl:'.swiper-button-next',prevEl:'.swiper-button-prev'},
+      autoplay:{delay:4500,disableOnInteraction:false},
+      effect:'fade'
+    });
+
+    // small helpers
+    const el = (q)=>document.querySelector(q);
+    const elAll = (q)=>Array.from(document.querySelectorAll(q));
+
+    // animate train along path using GSAP MotionPath
+    gsap.registerPlugin(MotionPathPlugin);
+    gsap.to('#movingTrain',{
+      duration:12,
+      repeat:-1,
+      ease:'linear',
+      motionPath:{path:'#railPath',align:'#railPath',autoRotate:false,alignOrigin:[0.5,0.5]}
+    });
+
+    // Keyboard shortcut: focus search with 's'
+    document.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase()==='s' && document.activeElement.tagName !=='INPUT'){
+        e.preventDefault();
+        el('#fromStation').focus();
+      }
+    });
+
+    // Mock train data generator
+    function mockTrain(id){
+      const depart = new Date();
+      depart.setHours(6 + Math.floor(Math.random()*14));
+      depart.setMinutes([0,15,30,45][Math.floor(Math.random()*4)]);
+      const arrive = new Date(depart.getTime()+ (3+Math.floor(Math.random()*12))*3600000);
+      return {
+        id: 'TR' + (10000+id),
+        name: ['Rajdhani Express','Duronto','Shatabdi','Intercity Express'][Math.floor(Math.random()*4)],
+        number: 12000+id,
+        depart: depart.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+        arrive: arrive.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+        duration: Math.round((arrive-depart)/3600000) + 'h',
+        availability: ['Available','Limited','Waitlist'][Math.floor(Math.random()*3)],
+        fare: 300 + Math.floor(Math.random()*900)
+      }
+    }
+
+    // Render train cards
+    function renderTrains(n=6,append=false){
+      const container = el('#trainResults');
+      if(!append) container.innerHTML='';
+      for(let i=1;i<=n;i++){
+        const t = mockTrain(Math.floor(Math.random()*900));
+        const card = document.createElement('div');
+        card.className='col-md-6 col-lg-4';
+        card.innerHTML = `
+          <div class="p-3 train-card h-100">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5 class="mb-1">${t.name} <small class="text-muted">#${t.number}</small></h5>
+                <div class="small text-muted">${t.id}</div>
+              </div>
+              <div class="text-end">
+                <div class="h5 mb-0">₹${t.fare}</div>
+                <div class="small text-${t.availability==='Available'?'success':'warning'}">${t.availability}</div>
+              </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div><strong>${t.depart}</strong><div class="small text-muted">Depart</div></div>
+              <div class="text-center"><small class="text-muted">${t.duration}</small></div>
+              <div class="text-end"><strong>${t.arrive}</strong><div class="small text-muted">Arrive</div></div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="small text-muted">Seat types: 1A, 2A, 3A, SL</div>
+              <div>
+                <button class="btn btn-sm btn-outline-primary me-2 viewSeats" data-train='${JSON.stringify(t)}'>View Seats</button>
+                <button class="btn btn-sm btn-primary bookNow" data-train='${JSON.stringify(t)}'>Book</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    // initial render
+    renderTrains(6);
+
+    // Load more
+    el('#loadMore').addEventListener('click', ()=>{
+      renderTrains(6,true);
+    });
+
+    // Booking modal behaviour (simple seat selection mock)
+    let selectedSeats = [];
+    function buildSeatMap(){
+      const map = el('#seatMap');
+      map.innerHTML='';
+      // create 10 rows x 6 cols seats
+      for(let r=1;r<=10;r++){
+        const row = document.createElement('div');
+        row.className='d-flex gap-2 mb-2';
+        for(let c=1;c<=6;c++){
+          const seat = document.createElement('button');
+          seat.className='btn btn-sm btn-light';
+          seat.style.minWidth='46px';
+          const id = `R${r}S${c}`;
+          seat.textContent = id;
+          seat.dataset.seat = id;
+          seat.addEventListener('click', (ev)=>{
+            ev.currentTarget.classList.toggle('btn-success');
+            const s = ev.currentTarget.dataset.seat;
+            if(selectedSeats.includes(s)) selectedSeats = selectedSeats.filter(x=>x!==s);
+            else selectedSeats.push(s);
+            updateSummary();
+          })
+          row.appendChild(seat);
+        }
+        map.appendChild(row);
+      }
+    }
+
+    function updateSummary(){
+      const box = el('#bookingSummary');
+      if(selectedSeats.length===0) box.innerHTML='No seats selected';
+      else box.innerHTML = `<div>Seats: <strong>${selectedSeats.join(', ')}</strong></div><div class="mt-2">Total: <strong>₹${selectedSeats.length*450}</strong></div>`;
+    }
+
+    // open booking modal from card
+    document.addEventListener('click',(e)=>{
+      if(e.target.matches('.bookNow, .viewSeats')){
+        const train = JSON.parse(e.target.dataset.train);
+        el('#modalTrainName').textContent = `${train.name} (${train.number})`;
+        selectedSeats = [];
+        buildSeatMap();
+        updateSummary();
+        const myModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        myModal.show();
+      }
+    });
+
+    el('#confirmBooking').addEventListener('click', ()=>{
+      if(selectedSeats.length===0){
+        alert('Please select at least one seat.');
+        return;
+      }
+      // pretend to book
+      const seats = selectedSeats.slice();
+      selectedSeats = [];
+      updateSummary();
+      bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+      showToast(`Booked seats ${seats.join(', ')} — enjoy your trip!`);
+    });
+
+    // toast helper
+    function showToast(msg){
+      const toast = document.createElement('div');
+      toast.className='toast align-items-center text-bg-primary border-0 show';
+      toast.setAttribute('role','alert');
+      toast.style.position='fixed';
+      toast.style.right='20px';
+      toast.style.bottom='20px';
+      toast.style.zIndex=9999;
+      toast.innerHTML = `<div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white ms-2 me-2" onclick="this.parentElement.parentElement.remove()"></button></div>`;
+      document.body.appendChild(toast);
+      setTimeout(()=>{toast.remove()},4000);
+    }
+
+    // small UX: populate resultsMeta from search form
+    el('#quickSearch').addEventListener('submit',(ev)=>{
+      ev.preventDefault();
+      const from = el('#fromStation').value || 'From';
+      const to = el('#toStation').value || 'To';
+      el('#resultsMeta').textContent = `${from} → ${to}`;
+      renderTrains(6);
+    });
+
+    // keyboard accessibility: focus trap in modal
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='Escape'){
+        // close modals
+      }
+    });
+
+    // small polish: insert current year
+    el('#currentYear').textContent = new Date().getFullYear();
+
+    // A couple of advanced GSAP scroll-trigger-like micro animations (no ScrollTrigger used for simplicity)
+    function microPulse(elSelector, delay=0){
+      gsap.fromTo(elSelector,{scale:0.98,opacity:0.9},{scale:1,opacity:1,duration:0.9,delay:delay,yoyo:true,repeat:1,ease:'power1.inOut'});
+    }
+    microPulse('.trade-card',0.5);
+
+    // Nice-to-have: lazy-load images
+    document.addEventListener('DOMContentLoaded',()=>{
+      const images = document.querySelectorAll('img[data-src]');
+      images.forEach(img=>{img.src = img.dataset.src});
+    });
+
+    /*****************************
+     * Developer notes & next steps
+     * (These small steps explain how to build the rest of the site in digestible chunks)
+     *****************************/
+
+    // Step 1: Replace mock data with API
+    // - Create endpoints: /api/search, /api/train/:id, /api/book
+    // - Use fetch() to call and render real responses
+
+    // Step 2: Authentication & profile
+    // - Add login/register pages, JWT tokens, and client-side protected routes
+
+    // Step 3: Seat map improvements
+    // - Make seat status come from server (booked/available), add tooltip with fare class and quota
+
+    // Step 4: Admin features
+    // - Add admin pages for rake management, crew scheduling, and alerts
+
+    // Step 5: Internationalization & accessibility
+    // - Add aria-* attributes, keyboard navigation, and translations (i18n)
+
+    // Step 6: Performance
+    // - Code-split, tree-shake, compress images, use service workers for offline
+
+    // You can keep expanding this single-file prototype into a multi-page app (React/Vue) or keep it
+    // as static pages with build tooling.
+
+  </script>
+
+</body>
+</html>
