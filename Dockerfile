@@ -1,15 +1,10 @@
 FROM php:8.2-apache
 
-# Install dependencies for GD and mysqli
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-jpeg --with-freetype \
-    && docker-php-ext-install gd mysqli
+# Install required PHP extensions
+RUN docker-php-ext-install gd mysqli
 
-# Copy all files to Apache's root folder
-COPY . /var/www/html/
+# Copy files from admin folder into Apache root
+COPY admin/ /var/www/html/
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
