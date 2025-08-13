@@ -1,12 +1,5 @@
 FROM php:8.2-apache
-
-# Install required PHP extensions
 RUN docker-php-ext-install gd mysqli
-
-# Copy files from admin folder into Apache root
-COPY admin/ /var/www/html/
-
-# Set correct permissions
-RUN chown -R www-data:www-data /var/www/html
-
+COPY . /var/www/html/
+RUN echo "DirectoryIndex index99.php" > /etc/apache2/conf-enabled/custom-index.conf
 EXPOSE 80
